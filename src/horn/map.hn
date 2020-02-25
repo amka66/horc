@@ -1,0 +1,117 @@
+%
+%   Copyright 2020 Amir Kantor
+%
+%   Licensed under the Apache License, Version 2.0 (the "License");
+%   you may not use this file except in compliance with the License.
+%   You may obtain a copy of the License at
+%
+%       http://www.apache.org/licenses/LICENSE-2.0
+%
+%   Unless required by applicable law or agreed to in writing, software
+%   distributed under the License is distributed on an "AS IS" BASIS,
+%   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%   See the License for the specific language governing permissions and
+%   limitations under the License.
+%
+
+% ___File name:___ map.hn
+
+% ___File purpose:___ A Horn knowledge base defining 'maps' (a concrete
+% representation of finite functions) and related concepts. It is a recurring
+% pattern included here as a toy example.
+
+% Horn Knowledge Base
+% ===================
+
+% Definition of a key (stub)
+% --------------------------
+
+key(a).
+key(b).
+key(c).
+key(d).
+
+% Definition of key inequality (stub)
+% -----------------------------------
+
+keys_not_equal(a, b).
+keys_not_equal(a, c).
+keys_not_equal(a, d).
+keys_not_equal(b, a).
+keys_not_equal(b, c).
+keys_not_equal(b, d).
+keys_not_equal(c, a).
+keys_not_equal(c, b).
+keys_not_equal(c, d).
+keys_not_equal(d, a).
+keys_not_equal(d, b).
+keys_not_equal(d, c).
+
+% Definition of a value (stub)
+% ----------------------------
+
+value(0).
+value(1).
+
+% Definition of a map, undefinedness
+% ----------------------------------
+
+map(nil).
+map(cons(M,K,V)) :-
+    %map(M),
+    %key(K),
+    not_defined(K, M),
+    value(V).
+%
+not_defined(K, nil) :-
+    key(K).
+% NOTE The following definition seems very inefficient due to the *two* 
+% recursive calls (they overlap, as both essentially check that `M` is a valid
+% map).
+% It appears to be exponential in the size of the map (?).
+% TODO Try to improve.
+not_defined(K2, cons(M,K,V)) :-
+    %map(M),
+    %key(K),
+    not_defined(K, M),
+    value(V),
+    %key(K2),
+    not_defined(K2, M),
+    keys_not_equal(K2, K).
+    
+% Definition of mapping-to
+% ------------------------
+
+maps_to(cons(M,K,V), K, V) :-
+    %map(M),
+    %key(K),
+    not_defined(K, M),
+    value(V).
+% NOTE Here too, the following definition seems very inefficient due to *two* 
+% recursive calls (they overlap, as both essentially check that `M` is a valid
+% map).
+% It appears to be exponential in the size of the map (?).
+% TODO Try to improve.
+maps_to(cons(M,K,V), K2, V2) :-
+    %map(M),
+    %key(K),
+    not_defined(K, M),
+    value(V),
+    %key(K2),
+    %value(V2),
+    maps_to(M, K2, V2).
+
+% Comments
+% --------
+
+% DONE Tested quite thoroughly.
+
+% NOTE There seems to be no point in defining map equality / inequality, as the
+% representation of a set-theoretic function is not unique. The more relevant 
+% notion is map equivalence / nonequivalence.
+% NOTE At this point, however, we don't define, nor relate to, structures' 
+% equivalence / nonequivalence (e.g., key equivalence, value equivalence, map
+% equivalence).
+% This would require revising the knowledge base (not only the definition of 
+% map equivalence / nonequivalence) -- e.g., undefinedness and maps-to must
+% be accordingly adjusted to rely on key and value equivalence.

@@ -1,0 +1,325 @@
+%
+%   Copyright 2020 Amir Kantor
+%
+%   Licensed under the Apache License, Version 2.0 (the "License");
+%   you may not use this file except in compliance with the License.
+%   You may obtain a copy of the License at
+%
+%       http://www.apache.org/licenses/LICENSE-2.0
+%
+%   Unless required by applicable law or agreed to in writing, software
+%   distributed under the License is distributed on an "AS IS" BASIS,
+%   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%   See the License for the specific language governing permissions and
+%   limitations under the License.
+%
+
+% ___File name:___ tm.hn
+
+% ___File purpose:___ A Horn knowledge base defining the computational model
+% of Turing machines. It is included as a demonstration of the computational
+% power of Horn logic, and an interesting object of study in its own right.
+
+% Horn Knowledge Base
+% ===================
+
+% Preliminaries
+% -------------
+
+natural(zero_natural).
+natural(successor_natural(N)) :-
+    natural(N).
+
+nonequal_naturals(zero_natural, successor_natural(N)) :-
+    natural(N).
+nonequal_naturals(successor_natural(N), zero_natural) :-
+    natural(N).
+nonequal_naturals(successor_natural(N), successor_natural(N1)) :-
+    %natural(N),
+    %natural(N1),
+    nonequal_naturals(N, N1).
+
+% Letters
+% -------
+
+letter(blank_letter).
+letter(form_nonblank_letter(N)) :-
+    natural(N).
+
+nonequal_letters(blank_letter, form_nonblank_letter(N)) :-
+    natural(N).
+nonequal_letters(form_nonblank_letter(N), blank_letter) :-
+    natural(N).
+nonequal_letters(form_nonblank_letter(N), form_nonblank_letter(N1)) :-
+    %natural(N),
+    %natural(N1),
+    nonequal_naturals(N, N1).
+
+% States
+% ------
+
+state(initial_state).
+state(form_noninitial_state(N)) :-
+    natural(N).
+
+nonequal_states(initial_state, form_noninitial_state(N)) :-
+    natural(N).
+nonequal_states(form_noninitial_state(N), initial_state) :-
+    natural(N).
+nonequal_states(form_noninitial_state(N), form_noninitial_state(N1)) :-
+    %natural(N),
+    %natural(N1),
+    nonequal_naturals(N, N1).
+
+% Directions
+% ----------
+
+direction(left_direction).
+direction(right_direction).
+direction(stay_direction).
+
+% Transition Table
+% ----------------
+
+nonequal_states_or_letters(S, L, S1, L1) :-
+    %state(S),
+    letter(L),
+    %state(S1),
+    letter(L1),
+    nonequal_states(S, S1).
+% NOTE In the following clause, the assumptions can be weakened (separating 
+% into `S` and `S1` as above), in which case the rules wouldn't be mutually
+% exclusive.
+nonequal_states_or_letters(S, L, S, L1) :-
+    state(S),
+    %letter(L),
+    %letter(L1),
+    nonequal_letters(L, L1).
+
+transition_table(empty_transition_table).
+transition_table(extend_transition_table(Tbl,S,L,S1,L1,D)) :-
+    %transition_table(Tbl),
+    %state(S),
+    %letter(L),
+    undefined_in_transition_table(Tbl, S, L),
+    state(S1),
+    letter(L1),
+    direction(D).
+%
+undefined_in_transition_table(empty_transition_table, S, L) :-
+    state(S),
+    letter(L).
+% NOTE The following definition seems very inefficient due to the *two*
+% recursive calls (they overlap, as both essentially check that `Tbl` is a
+% valid transition table).
+% It seems to be exponential in the size of the transition table (?).
+% TODO Try to improve.
+% Nevertheless, this doesn't really matter for simulation a Turing machine in 
+% our Prolog-based implementation of Horn logic, does it?
+undefined_in_transition_table(extend_transition_table(Tbl,S,L,S1,L1,D), S2,
+                              L2) :-
+    %transition_table(Tbl),
+    %state(S),
+    %letter(L),
+    undefined_in_transition_table(Tbl, S, L),
+    state(S1),
+    letter(L1),
+    direction(D),
+    %state(S2),
+    %letter(L2),
+    undefined_in_transition_table(Tbl, S2, L2),
+    nonequal_states_or_letters(S2, L2, S, L).
+
+transition_table_contains(extend_transition_table(Tbl,S,L,S1,L1,D), S, L, S1,
+                           L1, D) :-
+    %transition_table(Tbl),
+    %state(S),
+    %letter(L),
+    undefined_in_transition_table(Tbl, S, L),
+    state(S1),
+    letter(L1),
+    direction(D).
+% NOTE The following definition seems very inefficient too (again, there is an 
+% overlap in checking that `Tbl` is a valid transition table).
+% TODO Try to improve.
+% Nevertheless, this doesn't really matter for simulation a Turing machine in
+% our Prolog-based implementation of Horn logic, does it?
+transition_table_contains(extend_transition_table(Tbl,S,L,S1,L1,D), S2, L2,
+                           S3, L3, D1) :-
+    %transition_table(Tbl),
+    %state(S),
+    %letter(L),
+    undefined_in_transition_table(Tbl, S, L),
+    state(S1),
+    letter(L1),
+    direction(D),
+    %state(S2),
+    %letter(L2),
+    %state(S3),
+    %letter(L3),
+    %direction(D1),
+    transition_table_contains(Tbl, S2, L2, S3, L3, D1).
+
+% Tape
+% ----
+
+left_word(empty_left_word).
+left_word(append_letter_left_word(LW,L)) :-
+    left_word(LW),
+    letter(L).
+
+right_word(empty_right_word).
+right_word(append_letter_right_word(L,RW)) :-
+    right_word(RW),
+    letter(L).
+
+% NOTE Tape designates both the tape itself, as well as the location of the
+% tape head -- strictly after the left word. Other than the concatenation of
+% the left word and right word that constitutes the left (initial) part of the
+% tape, the rest of the tape is considered to be filled with blank letters.
+% NOTE We don't impose other restrictions on the representation of the tape, 
+% esp. with regard to blank letters.
+tape(form_tape(LW,RW)) :-
+    left_word(LW),
+    right_word(RW).
+
+read_at_head(form_tape(LW,empty_right_word), blank_letter) :-
+    left_word(LW).
+read_at_head(form_tape(LW,append_letter_right_word(L,RW)), L) :-
+    left_word(LW),
+    right_word(RW),
+    letter(L).
+
+write_at_head(form_tape(LW,empty_right_word), L1,
+              form_tape(LW,append_letter_right_word(L1,empty_right_word))) :-
+    left_word(LW),
+    letter(L1).
+write_at_head(form_tape(LW,append_letter_right_word(L,RW)), L1,
+              form_tape(LW,append_letter_right_word(L1,RW))) :-
+    left_word(LW),
+    right_word(RW),
+    letter(L),
+    letter(L1).
+
+move_head(form_tape(empty_left_word,RW), left_direction,
+          form_tape(empty_left_word,RW)) :-
+    right_word(RW).
+move_head(form_tape(append_letter_left_word(LW,L),RW), left_direction,
+          form_tape(LW,append_letter_right_word(L,RW))) :-
+    left_word(LW),
+    letter(L),
+    right_word(RW).
+move_head(form_tape(LW,empty_right_word), right_direction,
+       form_tape(append_letter_left_word(LW,blank_letter),empty_right_word)) :-
+    left_word(LW).
+move_head(form_tape(LW,append_letter_right_word(L,RW)), right_direction,
+          form_tape(append_letter_left_word(LW,L),RW)) :-
+    left_word(LW),
+    right_word(RW),
+    letter(L).
+move_head(Tp, stay_direction, Tp) :-
+    tape(Tp).
+
+% Configurations
+% --------------
+
+configuration(form_configuration(S,Tp)) :-
+    state(S),
+    tape(Tp).
+
+next_configuration(Tbl, form_configuration(S,Tp),
+                   form_configuration(S1,Tp1)) :-
+    %transition_table(Tbl),
+    %state(S),
+    %tape(Tp),
+    %letter(L),
+    read_at_head(Tp, L),
+    %state(S1),
+    %letter(L1),
+    %direction(D),
+    transition_table_contains(Tbl, S, L, S1, L1, D),
+    %tape(Tp0),
+    write_at_head(Tp, L1, Tp0),
+    %tape(Tp1),
+    move_head(Tp0, D, Tp1).
+
+% The following predicate holds when `next_configuration` is undefined.
+final_configuration(Tbl, form_configuration(S,Tp)) :-
+    %transition_table(Tbl),
+    %state(S),
+    %tape(Tp),
+    %letter(L),
+    read_at_head(Tp, L),
+    undefined_in_transition_table(Tbl, S, L).
+
+% Input & Output
+% --------------
+
+input_letter(form_nonblank_letter(N)) :-
+    natural(N).
+
+input_right_word(empty_right_word).
+input_right_word(append_letter_right_word(Li,RWi)) :-
+    input_right_word(RWi),
+    input_letter(Li).
+
+input_right_word_to_initial_configuration(RWi,
+           form_configuration(initial_state,form_tape(empty_left_word,RWi))) :-
+    input_right_word(RWi).
+
+configuration_to_output_left_word(form_configuration(S,form_tape(LW,RW)),
+                                  LW) :-
+    state(S),
+    left_word(LW),
+    right_word(RW).
+
+% Execution
+% ---------
+
+execution_of_configuration_into_sequence_of_configurations(Tbl, Cfg,
+                                                           zero_natural,
+                                                           Cfg) :-
+    transition_table(Tbl),
+    configuration(Cfg).
+execution_of_configuration_into_sequence_of_configurations(Tbl, Cfg, 
+                                                          successor_natural(N),
+                                                          Cfg9) :-
+    %transition_table(Tbl),
+    %configuration(Cfg),
+    %configuration(Cfg1),
+    next_configuration(Tbl, Cfg, Cfg1),
+    %natural(N),
+    %configuration(Cfg9),
+    execution_of_configuration_into_sequence_of_configurations(Tbl, Cfg1, N,
+                                                               Cfg9).
+
+% NOTE The following predicate can represent the execution of the machine on an
+% input word -- returning the corresponding output word and the number of 
+% execution steps (if the machine halts).
+execution_of_input_halts_with_output(Tbl, RWi, N, LW) :-
+    %transition_table(Tbl),
+    %input_right_word(RWi),
+    %configuration(Cfg),
+    input_right_word_to_initial_configuration(RWi, Cfg),
+    %natural(N),
+    %configuration(Cfg9),
+    execution_of_configuration_into_sequence_of_configurations(Tbl, Cfg, N,
+                                                               Cfg9),
+    final_configuration(Tbl, Cfg9),
+    %left_word(LW),
+    configuration_to_output_left_word(Cfg9, LW).
+
+% Comments
+% --------
+
+% TODO Knowledge base not sufficiently tested!
+
+% NOTE Fundamentally, we don't regard Horn logic as a *computational* model 
+% that may solve computational problems and *simulate* other computational 
+% models. Nevertheless, it seems that our Prolog-based implementation of Horn
+% logic (using SLD resolution) is quite close to actually simulating the
+% machines: it appears that the appropriate query on 
+% `execution_of_input_halts_with_output' (using variables for `N` and `LW`)
+% simulates the execution of the machine -- but only if it is given a depth
+% limit (without iterative deepening), so these executions are bounded and 
+% thus incomplete.

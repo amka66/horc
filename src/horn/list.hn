@@ -1,0 +1,152 @@
+%
+%   Copyright 2020 Amir Kantor
+%
+%   Licensed under the Apache License, Version 2.0 (the "License");
+%   you may not use this file except in compliance with the License.
+%   You may obtain a copy of the License at
+%
+%       http://www.apache.org/licenses/LICENSE-2.0
+%
+%   Unless required by applicable law or agreed to in writing, software
+%   distributed under the License is distributed on an "AS IS" BASIS,
+%   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%   See the License for the specific language governing permissions and
+%   limitations under the License.
+%
+
+% ___File name:___ list.hn
+
+% ___File purpose:___ A Horn knowledge base defining 'lists' and related 
+% concepts. It is a recurring pattern included here as a toy example.
+
+% Horn Knowledge Base
+% ===================
+
+% Definition of an element (stub)
+% -------------------------------
+
+element(0).
+element(1).
+
+% Definition of element equality / inequality (stub)
+% --------------------------------------------------
+
+% NOTE The following is not actually needed:
+%elements_equal(0, 0).
+%elements_equal(1, 1).
+
+elements_not_equal(0, 1).
+elements_not_equal(1, 0).
+
+% Definition of a list
+% --------------------
+
+list(nil).
+list(cons(L,E)) :-
+    list(L),
+    element(E).
+
+% Definition of list concatenation
+% --------------------------------
+
+concat(L, nil, L) :-
+    list(L).
+concat(L1, cons(L2,E2), cons(Lc,E2)) :-
+    %list(L1),
+    %list(L2),
+    element(E2),
+    %list(Lc),
+    concat(L1, L2, Lc).
+
+% Definition of list membership / nonmembership
+% ---------------------------------------------
+
+not_member(E, nil) :-
+    element(E).
+not_member(E2, cons(L1,E1)) :-
+    %list(L1),
+    %element(E1),
+    %element(E2),
+    not_member(E2, L1),
+    elements_not_equal(E2, E1).
+
+% NOTE In the following clause, the assumption `not_member(E, L)` can be 
+% excluded while re-including the erased ones, which would yet an equivalent 
+% knowledge base -- in which case the rules would *not* be mutually exclusive.
+member(E, cons(L,E)) :-
+    %list(L),
+    %element(E),
+    not_member(E, L).
+member(E2, cons(L1,E1)) :-
+    %list(L1),
+    element(E1),
+    %element(E2),
+    member(E2, L1).
+    
+% Definition of list equality / inequality
+% ----------------------------------------
+
+% NOTE The following is not actually needed:
+%equal(nil, nil).
+%equal(cons(L,E), cons(L,E)) :-
+%    list(L),
+%    element(E).
+%
+% NOTE The following is a more complicated version instead of the clause above 
+% (yielding an equivalent knowledge base):
+%equal(cons(L1,E1), cons(L2,E2)) :-
+%    %list(L1),
+%    %element(E1),
+%    %list(L2),
+%    %element(E2),
+%    equal(L1, L2),
+%    elements_equal(E1, E2).
+
+not_equal(nil, cons(L,E)) :-
+    list(L),
+    element(E).
+not_equal(cons(L,E), nil) :-
+    list(L),
+    element(E).
+not_equal(cons(L1,E1), cons(L2,E2)) :-
+    %list(L1),
+    element(E1),
+    %list(L2),
+    element(E2),
+    not_equal(L1, L2).
+not_equal(cons(L,E1), cons(L,E2)) :-
+    list(L),
+    %element(E1),
+    %element(E2),
+    elements_not_equal(E1, E2).
+%
+% NOTE The following is a more complicated version instead of the clause above 
+% (yielding an equivalent knowledge base):
+%not_equal(cons(L1,E1), cons(L2,E2)) :-
+%    %list(L1),
+%    %element(E1),
+%    %list(L2),
+%    %element(E2),
+%    equal(L1, L2),
+%    elements_not_equal(E1, E2).
+%
+% NOTE The following is a version in which the assumptions are weakened, 
+% instead of the (two) clause(s) above (yielding an equivalent knowledge base).
+% We prefer the one above, otherwise the rules wouldn't be mutually exclusive.
+%not_equal(cons(L1,E1), cons(L2,E2)) :-
+%    list(L1),
+%    %element(E1),
+%    list(L2),
+%    %element(E2),
+%    elements_not_equal(E1, E2).
+
+% Comments
+% --------
+
+% DONE Tested quite thoroughly.
+
+% NOTE At this point we don't define, nor relate to, structures' equivalence / 
+% nonequivalence (particularly, element equivalence and list equivalence).
+% This would require revising the knowledge base (not only the definition of 
+% list equivalence / nonequivalence) -- e.g., membership must be accordingly
+% adjusted to rely on member equivalence.

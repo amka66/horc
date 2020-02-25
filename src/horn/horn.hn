@@ -1,0 +1,572 @@
+%
+%   Copyright 2020 Amir Kantor
+%
+%   Licensed under the Apache License, Version 2.0 (the "License");
+%   you may not use this file except in compliance with the License.
+%   You may obtain a copy of the License at
+%
+%       http://www.apache.org/licenses/LICENSE-2.0
+%
+%   Unless required by applicable law or agreed to in writing, software
+%   distributed under the License is distributed on an "AS IS" BASIS,
+%   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%   See the License for the specific language governing permissions and
+%   limitations under the License.
+%
+
+% ___File name:___ horn.hn
+
+% ___File purpose:___ A Horn knowledge base defining Horn logic itself. It is
+% included as a demonstration of the expressive power of Horn logic in its
+% ability to define itself, and serves as a concise formal specifications 
+% document for Horn logic.
+
+% Horn Knowledge Base
+% ===================
+
+% Preliminaries
+% -------------
+
+binary(zero_binary).
+binary(one_binary).
+
+nonequal_binaries(zero_binary, one_binary).
+nonequal_binaries(one_binary, zero_binary).
+
+letter(form_letter(B1,B2,B3,B4,B5,B6,B7)) :-
+    binary(B1),
+    binary(B2),
+    binary(B3),
+    binary(B4),
+    binary(B5),
+    binary(B6),
+    binary(B7).
+
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1t,B2t,B3t,B4t,B5t,B6t,B7t)) :-
+    %binary(B1),
+    binary(B2),
+    binary(B3),
+    binary(B4),
+    binary(B5),
+    binary(B6),
+    binary(B7),
+    %binary(B1t),
+    binary(B2t),
+    binary(B3t),
+    binary(B4t),
+    binary(B5t),
+    binary(B6t),
+    binary(B7t),
+    nonequal_binaries(B1, B1t).
+% NOTE The assumptions in the following clauses can be weakened, in which case 
+% the rules would not be mutually exclusive.
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1,B2t,B3t,B4t,B5t,B6t,B7t)) :-
+    binary(B1),
+    %binary(B2),
+    binary(B3),
+    binary(B4),
+    binary(B5),
+    binary(B6),
+    binary(B7),
+    %binary(B2t),
+    binary(B3t),
+    binary(B4t),
+    binary(B5t),
+    binary(B6t),
+    binary(B7t),
+    nonequal_binaries(B2, B2t).
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1,B2,B3t,B4t,B5t,B6t,B7t)) :-
+    binary(B1),
+    binary(B2),
+    %binary(B3),
+    binary(B4),
+    binary(B5),
+    binary(B6),
+    binary(B7),
+    %binary(B3t),
+    binary(B4t),
+    binary(B5t),
+    binary(B6t),
+    binary(B7t),
+    nonequal_binaries(B3, B3t).
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1,B2,B3,B4t,B5t,B6t,B7t)) :-
+    binary(B1),
+    binary(B2),
+    binary(B3),
+    %binary(B4),
+    binary(B5),
+    binary(B6),
+    binary(B7),
+    %binary(B4t),
+    binary(B5t),
+    binary(B6t),
+    binary(B7t),
+    nonequal_binaries(B4, B4t).
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1,B2,B3,B4,B5t,B6t,B7t)) :-
+    binary(B1),
+    binary(B2),
+    binary(B3),
+    binary(B4),
+    %binary(B5),
+    binary(B6),
+    binary(B7),
+    %binary(B5t),
+    binary(B6t),
+    binary(B7t),
+    nonequal_binaries(B5, B5t).
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1,B2,B3,B4,B5,B6t,B7t)) :-
+    binary(B1),
+    binary(B2),
+    binary(B3),
+    binary(B4),
+    binary(B5),
+    %binary(B6),
+    binary(B7),
+    %binary(B6t),
+    binary(B7t),
+    nonequal_binaries(B6, B6t).
+nonequal_letters(form_letter(B1,B2,B3,B4,B5,B6,B7),
+                 form_letter(B1,B2,B3,B4,B5,B6,B7t)) :-
+    binary(B1),
+    binary(B2),
+    binary(B3),
+    binary(B4),
+    binary(B5),
+    binary(B6),
+    %binary(B7),
+    %binary(B7t),
+    nonequal_binaries(B7, B7t).
+
+word(empty_word).
+word(append_letter_word(W,L)) :-
+    word(W),
+    letter(L).
+
+nonequal_words(empty_word, append_letter_word(W,L)) :-
+    word(W),
+    letter(L).
+nonequal_words(append_letter_word(W,L), empty_word) :-
+    word(W),
+    letter(L).
+nonequal_words(append_letter_word(W,L), append_letter_word(W1,L1)) :-
+    %word(W),
+    letter(L),
+    %word(W1),
+    letter(L1),
+    nonequal_words(W, W1).
+% NOTE In the following clause, the assumptions can be weakened, in which case
+% the rules would not be mutually exclusive.
+nonequal_words(append_letter_word(W,L), append_letter_word(W,L1)) :-
+    word(W),
+    letter(L),
+    letter(L1),
+    nonequal_letters(L, L1).
+
+% Terms & Atoms (a.k.a atomic formulae)
+% -------------------------------------
+
+variable(form_variable(W)) :-
+    word(W).
+
+nonequal_variables(form_variable(W1), form_variable(W2)) :-
+    %word(W1),
+    %word(W2),
+    nonequal_words(W1, W2).
+
+% The following predicate is a.k.a (in abstract syntax tree terminology) a 
+% constructor (???).
+function(form_function(W)) :-
+    word(W).
+
+term(variable_term(V)) :-
+    variable(V).
+term(function_term(Fu,Ts)) :-
+    function(Fu),
+    term_list(Ts).
+%
+term_list(empty_term_list).
+term_list(append_term_term_list(Ts,T)) :-
+    term_list(Ts),
+    term(T).
+
+predicate(form_predicate(W)) :-
+    word(W).
+
+% NOTE We use `atomm` instead of the reserved predicate `atom`
+atomm(form_atom(P,Ts)) :-
+    predicate(P),
+    term_list(Ts).
+
+atom_list(empty_atom_list).
+atom_list(append_atom_atom_list(As,A)) :-
+    atom_list(As),
+    atomm(A).
+
+% Clauses (definite Horn clauses)
+% ===============================
+
+% NOTE We use `clausee` instead of the reserved predicate `clause`
+clausee(form_clause(As,A)) :-
+    atom_list(As),
+    atomm(A).
+
+% Knowledge bases
+% ---------------
+
+% NOTE The following is essentially a clause list. As there is no other use for
+% such list, we identify a knowledge base with such list. Otherwise define a
+% clause list and use it to form a knowledge base.
+knowledge_base(empty_knowledge_base).
+knowledge_base(extend_knowledge_base(KB,C)) :-
+    knowledge_base(KB),
+    clausee(C).
+
+% NOTE In the following clause, the assumptions can be strengthened so as to
+% make the rules mutually exclusive. However, as far as we see, this requires
+% the definition of a clause *not* being a member of a knowledge base.
+knowledge_base_contains(extend_knowledge_base(KB,C), C) :-
+    knowledge_base(KB),
+    clausee(C).
+knowledge_base_contains(extend_knowledge_base(KB,C), C1) :-
+    %knowledge_base(KB),
+    clausee(C),
+    %clausee(C1),
+    knowledge_base_contains(KB, C1).
+
+% Ground Terms & Atoms
+% --------------------
+
+ground_term(function_term(Fu,GTs)) :-
+    function(Fu),
+    ground_term_list(GTs).
+%
+ground_term_list(empty_term_list).
+ground_term_list(append_term_term_list(GTs,GT)) :-
+    ground_term_list(GTs),
+    ground_term(GT).
+
+ground_atom(form_atom(P,GTs)) :-
+    predicate(P),
+    ground_term_list(GTs).
+
+ground_atom_list(empty_atom_list).
+ground_atom_list(append_atom_atom_list(GAs,GA)) :-
+    ground_atom_list(GAs),
+    ground_atom(GA).
+
+% Grounding Assignments and Substitution
+% --------------------------------------
+
+% NOTE We allow assigning variables to ground terms only.
+assignment(empty_assignment).
+assignment(extend_assignment(S,V,GT)) :-
+    %assignment(S),
+    %variable(V),
+    undefined_in_assignment(S, V),
+    ground_term(GT).
+%
+undefined_in_assignment(empty_assignment, V) :-
+    variable(V).
+% NOTE The following definition seems very inefficient due to the *two* 
+% recursive calls (they overlap, as both essentially check that `S` is a valid
+% assignment).
+% It seems to be exponential in the size of the assignment (?).
+% TODO Try to improve.
+undefined_in_assignment(extend_assignment(S,V,GT), V1) :-
+    %assignment(S),
+    %variable(V),
+    undefined_in_assignment(S, V),
+    ground_term(GT),
+    %variable(V1),
+    undefined_in_assignment(S, V1),
+    nonequal_variables(V1, V).
+
+assigns_to(extend_assignment(S,V,GT), V, GT) :-
+    %assignment(S),
+    %variable(V),
+    undefined_in_assignment(S, V),
+    ground_term(GT).
+% NOTE The following definition seems very inefficient too (again, there is an 
+% overlap in checking that `S` is a valid assignment).
+% TODO Try to improve.
+assigns_to(extend_assignment(S,V,GT), V1, GT1) :-
+    %assignment(S),
+    %variable(V),
+    undefined_in_assignment(S, V),
+    ground_term(GT),
+    %variable(V1),
+    %ground_term(GT1),
+    assigns_to(S, V1, GT1).
+
+% NOTE Substitution is undefined unless it is "grounding". Specifically, it is
+% not defined for variables (as terms) that are not included in the 
+% (grounding) assignment.
+substituted_in_term(variable_term(V), S, GT) :-
+    %variable(V),
+    %assignment(S),
+    %ground_term(GT),
+    assigns_to(S, V, GT).
+substituted_in_term(function_term(Fu,Ts), S, function_term(Fu,GTs)) :-
+    function(Fu),
+    %term_list(Ts),
+    %assignment(S),
+    %ground_term_list(GTs),
+    substituted_in_term_list(Ts, S, GTs).
+%
+substituted_in_term_list(empty_term_list, S, empty_term_list) :-
+    assignment(S).
+substituted_in_term_list(append_term_term_list(Ts,T), S,
+                         append_term_term_list(GTs,GT)) :-
+    %term_list(Ts),
+    %term(T),
+    %assignment(S),
+    %ground_term_list(GTs),
+    substituted_in_term_list(Ts, S, GTs),
+    %ground_term(GT),
+    substituted_in_term(T, S, GT).
+
+substituted_in_atom(form_atom(P,Ts), S, form_atom(P,GTs)) :-
+    predicate(P),
+    %term_list(Ts),
+    %assignment(S),
+    %ground_term_list(GTs),
+    substituted_in_term_list(Ts, S, GTs).
+
+substituted_in_atom_list(empty_atom_list, S, empty_atom_list) :-
+    assignment(S).
+substituted_in_atom_list(append_atom_atom_list(As,A), S,
+                         append_atom_atom_list(GAs,GA)) :-
+    %atom_list(As),
+    %atomm(A),
+    %assignment(S),
+    %ground_atom_list(GAs),
+    substituted_in_atom_list(As, S, GAs),
+    %ground_atom(GA),
+    substituted_in_atom(A, S, GA).
+    
+% Deduction (with proof terms in the form of derivation trees)
+% ------------------------------------------------------------
+
+% NOTE We chose a representation of proofs / proof lists that explicitly
+% contain the ground atom / ground atom list that it proves. I don't think that
+% it's mandatory, but it seems somewhat preferable.
+
+true_ground_atom_with_proof(KB, GA,
+                            form_proof(Pfs,form_clause(As,A),S,GAs,GA)) :-
+    %knowledge_base(KB),
+    %atom_list(As),
+    %atomm(A),
+    knowledge_base_contains(KB, form_clause(As,A)),
+    %assignment(S),
+    %ground_atom_list(GAs),
+    substituted_in_atom_list(As, S, GAs),
+    %ground_atom(GA),
+    substituted_in_atom(A, S, GA),
+    %proof_list(Pfs), % NOTE Not available and not needed.
+    true_ground_atom_list_with_proof_list(KB, GAs, Pfs).
+%
+true_ground_atom_list_with_proof_list(KB, empty_atom_list,
+                                      empty_proof_list(empty_atom_list)) :-
+    knowledge_base(KB).
+true_ground_atom_list_with_proof_list(KB, append_atom_atom_list(GAs,GA),
+              append_proof_proof_list(Pfs,Pf,append_atom_atom_list(GAs,GA))) :-
+    %knowledge_base(KB),
+    %ground_atom_list(GAs),
+    %ground_atom(GA),
+    %proof_list(Pfs), % NOTE Not available and not needed.
+    true_ground_atom_list_with_proof_list(KB, GAs, Pfs),
+    %proof(Pf), % NOTE Not available and not needed.
+    true_ground_atom_with_proof(KB, GA, Pf).
+
+% NOTE This predicate can represent Horn logic queries on an atom (containing 
+% variables) -- returning satisfying assignments together with the results of
+% their substitution, and a proof.
+true_assignment_for_atom_with_proof(KB, A, S, GA, Pf) :-
+    %knowledge_base(KB),
+    %atomm(A),
+    %assignment(S),
+    %ground_atom(GA),
+    substituted_in_atom(A, S, GA),
+    %proof(Pf), % NOTE Not available and not needed.
+    true_ground_atom_with_proof(KB, GA, Pf).
+
+% NOTE This predicate can represent Horn logic queries on an atom list
+% (containing variables) -- returning satisfying assignments together with the
+% results of their substitution, and a proof list.
+true_assignment_for_atom_list_with_proof_list(KB, As, S, GAs, Pfs) :-
+    %knowledge_base(KB),
+    %atom_list(As),
+    %assignment(S),
+    %ground_atom_list(GAs),
+    substituted_in_atom_list(As, S, GAs),
+    %proof_list(Pfs), % NOTE Not available and not needed.
+    true_ground_atom_list_with_proof_list(KB, GAs, Pfs).
+
+% Deduction -- alternative 1 (without proof terms)
+% ----------------------/-------------------------
+
+% NOTE This part that doesn't include proof terms at all is excluded, as it is 
+% essentially subsumed by the definition that includes proof terms in the form 
+% of deduction trees. It is only temporarily kept for later reference. 
+% TODO Remove.
+
+%true_ground_atom(KB, GA) :-
+%    %knowledge_base(KB),
+%    %atom_list(As),
+%    %atomm(A),
+%    knowledge_base_contains(KB, form_clause(As,A)),
+%    %assignment(S),
+%    %ground_atom_list(GAs),
+%    substituted_in_atom_list(As, S, GAs),
+%    %ground_atom(GA),
+%    substituted_in_atom(A, S, GA),
+%    true_ground_atom_list(KB, GAs).
+%%
+%true_ground_atom_list(KB, empty_atom_list) :-
+%    knowledge_base(KB).
+%true_ground_atom_list(KB, append_atom_atom_list(GAs,GA)) :-
+%    %knowledge_base(KB),
+%    %ground_atom_list(GAs),
+%    %ground_atom(GA),
+%    true_ground_atom_list(KB, GAs),
+%    true_ground_atom(KB, GA).
+
+% Deduction -- alternative 2 (proof terms in the form of derivation 
+% *sequences*)
+% ------------------------------/----------------------------------
+
+% NOTE This part about derivation sequences is excluded as they are less
+% natural in this context and less straightforward to define (but more concise
+% in practice). It is only temporarily kept for later reference.
+% TODO Remove.
+
+% TODO I am not certain about the structure of the following definitions -- in 
+% terms of elegance and simplicity of presentation, correctness (that it defines 
+% exactly what we want), and, in the light of the notes below,
+% how execution progresses exactly and what's the complexity.
+%derivation_sequence(KB, empty_derivation_sequence) :-
+%   knowledge_base(KB).
+%derivation_sequence(KB, extend_derivation_sequence(DS,C,S,GAs,GA)) :-
+%   %knowledge_base(KB),
+%   %derivation_sequence(KB, DS),
+%   %clausee(C),
+%   %assignment(S),
+%   %ground_atom_list(GAs),
+%   %ground_atom(GA),
+%   enabled_by_derivation_sequence(KB, DS, C, S, GAs, GA).
+%%
+%enabled_by_derivation_sequence(KB, DS, form_clause(As,A), S, GAs, GA) :-
+%   %knowledge_base(KB),
+%   %derivation_sequence(KB, DS),
+%   %atom_list(As),
+%   %atomm(A),
+%   knowledge_base_contains(KB, form_clause(As,A)),
+%   %assignment(S),
+%   %ground_atom_list(GAs),
+%   substituted_in_atom_list(As, S, GAs),
+%   %ground_atom(GA),
+%   substituted_in_atom(A, S, GA),
+%   are_derived_within_derivation_sequence(KB, DS, GAs).
+%%
+% NOTE In the following clause, the assumptions can be strengthened so as to
+% make the rules mutually exclusive. However, as far as we see, this requires
+% the definition of *not* being derived within a derivation sequence.
+%is_derived_within_derivation_sequence(KB,
+%                             extend_derivation_sequence(DS,C,S,GAs,GA), GA) :-
+%   %knowledge_base(KB),
+%   %derivation_sequence(KB, DS),
+%   %clausee(C),
+%   %assignment(S),
+%   %ground_atom_list(GAs),
+%   %ground_atom(GA),
+%   enabled_by_derivation_sequence(KB, DS, C, S, GAs, GA).
+%is_derived_within_derivation_sequence(KB, 
+%                            extend_derivation_sequence(DS,C,S,GAs,GA), GA1) :-
+%   %knowledge_base(KB),
+%   %derivation_sequence(KB, DS),
+%   %clausee(C),
+%   %assignment(S),
+%   %ground_atom_list(GAs),
+%   %ground_atom(GA),
+%   enabled_by_derivation_sequence(KB, DS, C, S, GAs, GA),
+%   %ground_atom(GA1),
+%   is_derived_within_derivation_sequence(KB, DS, GA1).
+%%
+%are_derived_within_derivation_sequence(KB, DS, empty_atom_list) :-
+%   %knowledge_base(KB),
+%   derivation_sequence(KB, DS).
+%are_derived_within_derivation_sequence(KB, DS, 
+%                                       append_atom_atom_list(GAs,GA)) :-
+%   %knowledge_base(KB),
+%   %derivation_sequence(KB, DS),
+%   %ground_atom_list(GAs),
+%   %ground_atom(GA),
+%   are_derived_within_derivation_sequence(KB, DS, GAs),
+%   is_derived_within_derivation_sequence(KB, DS, GA).
+
+% Comments
+% --------
+
+% TODO Knowledge base not sufficiently tested!
+
+% NOTE We regard Horn logic as a fully declarative language, and as such it is
+% defined independently of any strategy for executing queries (backward 
+% chaining, forward chaining, etc.). Particularly, the order of clauses in a 
+% knowledge base doesn't matter, as well as the order of atoms in the body of 
+% a clause. It is thus a *logic*, no different from other logics, and the 
+% computerized environment for performing queries corresponds to an automated 
+% theorem proving tool for other logics. Because it is undefined *how* the
+% execution of a query would be performed, and particularly complexity measures
+% are undefined as well, it should *not* be regarded as a model of computation.
+% So, formally, Horn logic (subject to this approach) has no capability of 
+% *simulating* computations or computational models.
+% If we did formalize a strategy for executing queries (say, SLD resolution 
+% with depth-first iterative deepening), then Horn logic could *also* be 
+% regarded as a fully fledged computational model, and we could talk about
+% *simulating* other computational models. Note, however, that standard
+% execution strategies, such as the one above, doesn't make it easy to simulate
+% other models (esp., iterative deepening makes the execution very unique).
+% Also, arguably, the choice of the execution strategy seems somewhat
+% arbitrary, so it doesn't feel at the hart of Horn logic.
+% (Also note that in case we formalize an execution strategy, with regard to 
+% this file, we would have liked not only to *represent* the strategy in
+% Horn logic, but also to *simulate* the strategy like we would do for other
+% computational models. However, this would complicate the definition to a
+% great extent, and the definition of the strategy would probably have to come 
+% *in addition* to a definition of the declarative semantics of Horn logic.
+% Moreover, if knowledge bases were to take execution into consideration,
+% we can imagine a possible conflict between (a) a simple, straightforward, 
+% *declarative* specifications (i.e., an inductive definition); and 
+% (b) achieving the anticipated computational behavior and the predicates that
+% are needed for that.)
+
+% NOTE Accordingly, the above representation of Horn logic doesn't
+% actually *simulate* (computationally) our Prolog-based implementation of Horn
+% logic. However, given that our Prolog-based implementation of Horn logic
+% produces a sound and complete enumeration of query results with regard to any
+% object language, it allows executing queries in the object representation 
+% of Horn logic (using the predicates `true_assignment_for_atom_with_proof' and 
+% `true_assignment_for_atom_list_with_proof_list'), and these executions also
+% produce sound and complete enumeration of query results. However, as 
+% mentioned, these executions don't *simulate* their counterparts performed in
+% the Prolog-based implementation -- they return an infinite enumeration of the
+% assignments (also to variables that don't appear in the query), and, in 
+% contrast to the Prolog-based implementation, *never* stop.
+
+% NOTE We adopt the standard separation between a function and a predicate, and
+% correspondingly that between a term and an atom, although it is *not* really 
+% needed. In case we choose to refrain from it, we can just remove the notions
+% of a predicate and an atom (leave it with functions and terms), and maybe
+% change terminology from a 'function' into a 'constructor' and from a
+% 'term' into a (schematic) 'expression' or a (schematic) 'abstract syntax 
+% tree'.
+
+% NOTE What are the exact requirements from a proof term (in general -- what
+% are they for *exactly*)? Is it only to make querying for provability much
+% easier (computationally)?
