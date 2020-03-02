@@ -2,7 +2,7 @@
 
 ## Features ##
 
-* A lightweight [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing)) of [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause), called `horc`, currently for educational use.
+* A free and open-source lightweight [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing)) of [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause), called `horc`, currently for educational use.
   * A Horn clause is nothing but a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference).
   * This way, a set of Horn clauses forms an [inductive definition](https://en.wikipedia.org/wiki/Recursive_definition).
   * Horn clauses constitute a simple [logic](https://en.wikipedia.org/wiki/Logic), called [__Horn logic__](https://www.w3.org/2005/rules/wg/wiki/Horn_Logic), more commonly known as 'pure' [logic programming](https://en.wikipedia.org/wiki/Logic_programming).
@@ -12,11 +12,10 @@ Included with `horc` are the complete definitions of the following formalisms ([
   * Toy formalisms of '[lists](https://en.wikipedia.org/wiki/List_(abstract_data_type))' and '[maps](https://en.wikipedia.org/wiki/Associative_array)' -- included to illustrate Horn logic in use.
   * The computational model of [Turing machines](https://en.wikipedia.org/wiki/Turing_machine) -- demonstrating the computational power of Horn logic, and an interesting object of study in its own.
   * [Horn logic](https://en.wikipedia.org/wiki/Horn_clause) itself -- demonstrating more of the expressive power of Horn logic in its ability to define itself, and serving as a concise formal specifications document of Horn logic.
-  * [First-order logic](https://en.wikipedia.org/wiki/First-order_logic), as well as the complete formalization of mathematics in Horn logic using `horc`, are to be included soon in a follow-up project.
-  __TODO__ Add link.
+  * [First-order logic](https://en.wikipedia.org/wiki/First-order_logic), as well as the complete formalization of mathematics in Horn logic using `horc`, are included in a follow-up project -- see [here](https://github.com/amka66/mai).
   This, yet again, is a demonstration of the expressive power of Horn logic, and the effectiveness of our approach.
 
-* `horc` is fully packaged within a [Docker](https://en.wikipedia.org/wiki/Docker_(software)) image hosted in [Docker Hub](https://hub.docker.com).
+* `horc` is packaged within a [Docker](https://en.wikipedia.org/wiki/Docker_(software)) image hosted in [Docker Hub](https://hub.docker.com).
 Therefore, it requires no installation and can be executed with a single command on any computer with Docker (in the first usage, internet connection is needed).
   * Under the hood, `horc` is implemented in [Prolog](https://en.wikipedia.org/wiki/Prolog) (a computationally-efficient sibling of Horn logic) and operates within a Prolog environment.
 
@@ -35,7 +34,7 @@ Therefore, it requires no installation and can be executed with a single command
 
 ## Who is it For? ##
 
-> We invite others who share our vision to join us in making this into an industrial-strength open-source framework for representing all sorts of knowledge, and making inferences from it.
+> We invite others who share our vision to join us in making this into an industrial-strength free and open-source framework for representing all sorts of knowledge, and making inferences from it.
 
 ## Where to Begin? ##
 
@@ -45,7 +44,7 @@ This makes advanced language features available in a lightweight implementation 
 However, it also means that in order to *use* the `horc` interpreter, in addition to conceptual understanding of Horn logic, some level of *practical* knowledge of Prolog is necessary too.
 First, querying Horn knowledge bases and operating with them is done in a Prolog environment.
 Second, Horn knowledge bases use standard Prolog notation for the Horn clauses.
-*Developing* for `horc`, in contrast to merely using it, requires deeper understanding of Prolog, and, in particular, the meta-interpreter architecture. A list of resources is included below.
+*Developing* for `horc`, in contrast to merely using it, requires deeper understanding of Prolog, and, in particular, the meta-interpreter architecture. A list of resources is included in the following.
 
 ## How to Execute? ##
 
@@ -57,7 +56,7 @@ In the command prompt, simply enter the following:
 * `<docker_hub_user_id>` (mandatory): User ID in Docker Hub that currently stores the docker image.
 Use `amka66`. __TODO__ Upload image!
 
-* `<horn_file>` (mandatory): Path to a __Horn knowledge base__ file (optionally ending with the extension `.hn`), consisting of a set of Horn clauses, and written __in Prolog notation__.
+* `<horn_file>` (mandatory): Path to a __Horn knowledge base__ file (optionally ending with the extension `.hn`), consisting of a set of Horn clauses, and written in Prolog notation.
 It is to be loaded and consulted by the interpreter.
 The path is within the container (consider option `-v` below to access the host machine).
 Included knowledge bases that can be used here: `list.hn` and `map.hn` (toy examples), `tm.hn` (the computational model of Turing machines), and `horn.hn` (Horn logic itself).
@@ -90,9 +89,9 @@ Load the included Horn knowledge base `tm.hn`, then load and execute a Prolog sc
 `$ docker container run -it --rm -v ~/my-files:/mount amka66/horc /mount/kb.hn /mount/queries/kb-queries.pl`  
 Load a Horn knowledge base stored locally in `~/my-files/kb.hn`, load and execute a Prolog script stored locally in `~/my-files/queries/kb-queries.pl`, and start an interactive Prolog session with the user.
 
-## Overview of Source Code (for developers) ##
+## Overview of Source Code ##
 
-The following is an account of all files in this repository.
+The following is an account of all files in the repository.
 
 File | Directory | Description
 ---- | --------- | -----------
@@ -111,9 +110,9 @@ File | Directory | Description
 
 ## List of Resources ##
 
-* As a main comprehensive resource for the `horc` project, which we find understandable, rigorous, and highly aligned with our approach, we may suggest:
-[Sterling, Leon, and Ehud Y. Shapiro. _The Art of Prolog: Advanced Programming Techniques._ MIT press, 2nd edition, 1994.](https://books.google.com/books?hl=en&lr=&id=w-XjuvpOrjMC&oi=fnd&pg=PR14&dq=related:ZL81VhpV5gIJ:scholar.google.com)
-It is a classic text by Sterling and Shapiro on Prolog and logic programming ('pure' logic programming is a synonym for Horn logic).
+* As a main comprehensive resource for the `horc` project, which we find quite understandable, rigorous, and highly aligned with our approach, we may suggest:
+[Sterling, Leon, and Ehud Y. Shapiro. _The Art of Prolog: Advanced Programming Techniques._ MIT Press, 2nd edition, 1994.](https://books.google.com/books?hl=en&lr=&id=w-XjuvpOrjMC&oi=fnd&pg=PR14&dq=related:ZL81VhpV5gIJ:scholar.google.com)
+It is a classic text by Sterling and Shapiro on Prolog and logic programming (pure logic programming is a synonym for Horn logic).
 It covers both our object of study (namely, Horn logic), which is fed in the form of knowledge bases into `horc`, as well as the framework in which `horc` is written; namely, Prolog.
 'The Art of Prolog' starts with Horn logic and Horn knowledge bases (called there 'logic programs'), and describes their semantics from several points of view -- both their inductive nature and the computation used to resolve queries.
 Then, it moves to Prolog and its semantics, and, in particular, emphasizes the close relationship between the two formalisms.
@@ -122,7 +121,7 @@ The book also discusses Prolog meta-interpreters, which is the architecture chos
 * On the contrary, in order to start playing with `horc` and the included material right away, one may consult [Learn Prolog Now!](http://www.learnprolognow.org/lpnpage.php?pageid=online), which is a quick introduction to Prolog available online.
 
 * We should also mention the following text by Winskel, mainly as inspiration:
-[Winskel, Glynn. _The Formal Semantics of Programming Languages: An Introduction._ MIT press, 1993.](https://books.google.com/books?hl=en&lr=&id=JzUNn6uUxm0C&oi=fnd&pg=PA1&ots=1XqmnnVv1o&sig=zLryVTHlxXqP--GRmwSFxkptGGM)
+[Winskel, Glynn. _The Formal Semantics of Programming Languages: An Introduction._ MIT Press, 1993.](https://books.google.com/books?hl=en&lr=&id=JzUNn6uUxm0C&oi=fnd&pg=PA1&ots=1XqmnnVv1o&sig=zLryVTHlxXqP--GRmwSFxkptGGM)
 It is a valuable resource on the structure and the kind of mathematics needed in order to properly define and reason about programming languages, and formal systems in general.
 It begins with a separation between concrete syntax and abstract syntax trees.
 Then, it emphasizes the *inductive* nature of formal systems: from the inductive construction of the expressions of language; through the central role played by rules of inference in defining semantics; to an account of the generalized theory of induction that is needed in order to reason about these constructions.
@@ -164,7 +163,11 @@ Harrison adopts functional programming as his meta-formalism.
 It is interesting to compare functional programming and Horn logic in that regard. 
 Horn logic may perhaps be considered more of a 'logical system' (with Horn knowledge-base definitions being closer to mathematics than programming) while functional programming being more of a 'computational model', but there are reasons to believe that there is no sharp distinction between the two terms.
 
-__NOTE__ More content about `horc` and the included material may be found in commit `ba191a15a8`, directory `doc`.
+__TODO__ Mention also [Isabelle](https://en.wikipedia.org/wiki/Isabelle_(proof_assistant))'s meta-formalism, and compare.
+
+__NOTE__ More info about `horc` and the included material may be found in commit `ba191a15a8`, directory `doc`.
+
+__TODO__ Add a short paper to arXiv, and include a BibTeX entry for citation.
 
 __TODO__ Go over todos.
 

@@ -312,7 +312,7 @@ execution_of_input_halts_with_output(Tbl, RWi, N, LW) :-
 % Comments
 % --------
 
-% TODO Knowledge base not sufficiently tested!
+% TODO Knowledge base is not sufficiently tested.
 
 % NOTE Fundamentally, we don't regard Horn logic as a *computational* model 
 % that may solve computational problems and *simulate* other computational 

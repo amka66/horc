@@ -104,7 +104,7 @@ maps_to(cons(M,K,V), K2, V2) :-
 % Comments
 % --------
 
-% DONE Tested quite thoroughly.
+% DONE Tested quite thoroughly August 11, 2015 by Amir Kantor.
 
 % NOTE There seems to be no point in defining map equality / inequality, as the
 % representation of a set-theoretic function is not unique. The more relevant 

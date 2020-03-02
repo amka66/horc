@@ -263,7 +263,7 @@ ground_atom_list(append_atom_atom_list(GAs,GA)) :-
 % Grounding Assignments and Substitution
 % --------------------------------------
 
-% NOTE We allow assigning variables to ground terms only.
+% NOTE We allow assigning variables with ground terms only.
 assignment(empty_assignment).
 assignment(extend_assignment(S,V,GT)) :-
     %assignment(S),
@@ -352,10 +352,6 @@ substituted_in_atom_list(append_atom_atom_list(As,A), S,
     
 % Deduction (with proof terms in the form of derivation trees)
 % ------------------------------------------------------------
-
-% NOTE We chose a representation of proofs / proof lists that explicitly
-% contain the ground atom / ground atom list that it proves. I don't think that
-% it's mandatory, but it seems somewhat preferable.
 
 true_ground_atom_with_proof(KB, GA,
                             form_proof(Pfs,form_clause(As,A),S,GAs,GA)) :-
@@ -447,7 +443,7 @@ true_assignment_for_atom_list_with_proof_list(KB, As, S, GAs, Pfs) :-
 % TODO Remove.
 
 % TODO I am not certain about the structure of the following definitions -- in 
-% terms of elegance and simplicity of presentation, correctness (that it defines 
+% terms of simplicity of presentation, maybe even correctness (that it defines 
 % exactly what we want), and, in the light of the notes below,
 % how execution progresses exactly and what's the complexity.
 %derivation_sequence(KB, empty_derivation_sequence) :-
@@ -513,7 +509,7 @@ true_assignment_for_atom_list_with_proof_list(KB, As, S, GAs, Pfs) :-
 % Comments
 % --------
 
-% TODO Knowledge base not sufficiently tested!
+% TODO Knowledge base is not sufficiently tested.
 
 % NOTE We regard Horn logic as a fully declarative language, and as such it is
 % defined independently of any strategy for executing queries (backward 
@@ -522,10 +518,10 @@ true_assignment_for_atom_list_with_proof_list(KB, As, S, GAs, Pfs) :-
 % a clause. It is thus a *logic*, no different from other logics, and the 
 % computerized environment for performing queries corresponds to an automated 
 % theorem proving tool for other logics. Because it is undefined *how* the
-% execution of a query would be performed, and particularly complexity measures
-% are undefined as well, it should *not* be regarded as a model of computation.
-% So, formally, Horn logic (subject to this approach) has no capability of 
-% *simulating* computations or computational models.
+% execution of a query would be performed, Horn logic (subject to this approach)
+% has no  % capability of *simulating* computations or computational models, 
+% and complexity measures are undefined as well. Thus, it should probably *not* 
+% be regarded as a model of computation.
 % If we did formalize a strategy for executing queries (say, SLD resolution 
 % with depth-first iterative deepening), then Horn logic could *also* be 
 % regarded as a fully fledged computational model, and we could talk about
@@ -554,7 +550,7 @@ true_assignment_for_atom_list_with_proof_list(KB, As, S, GAs, Pfs) :-
 % of Horn logic (using the predicates `true_assignment_for_atom_with_proof' and 
 % `true_assignment_for_atom_list_with_proof_list'), and these executions also
 % produce sound and complete enumeration of query results. However, as 
-% mentioned, these executions don't *simulate* their counterparts performed in
+% mentioned, these executions don't *simulate*
 % the Prolog-based implementation -- they return an infinite enumeration of the
 % assignments (also to variables that don't appear in the query), and, in 
 % contrast to the Prolog-based implementation, *never* stop.

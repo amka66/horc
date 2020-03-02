@@ -143,7 +143,7 @@ not_equal(cons(L,E1), cons(L,E2)) :-
 % Comments
 % --------
 
-% DONE Tested quite thoroughly.
+% DONE Tested quite thoroughly August 11, 2015 by Amir Kantor.
 
 % NOTE At this point we don't define, nor relate to, structures' equivalence / 
 % nonequivalence (particularly, element equivalence and list equivalence).

@@ -104,7 +104,7 @@ call_horn_with_limit_rec([Goal|RestGoals], Limit, Depth, Result) :-
 % solutions. It is therefore SOUND for Horn logic, and, in a sense,
 % "complete" w.r.t the given depth limit.
 % NOTE This predicate adopts (and conforms to) the contract of
-% SWI-prolog's `call_with_depth_limit/3` (version 7.2.2), except that
+% SWI-Prolog's `call_with_depth_limit/3` (version 7.2.2), except that
 % here unification is sound (this is equivalent to executing
 % `call_with_depth_limit/3` with SWI-Prolog's `occurs_check` flag set
 % to `true`).
@@ -176,8 +176,7 @@ horn(Goal, LimitStep) :-
 hornadd(Goal, LimitStep) :-
     horn(Goal, LimitStep),
     horn_pl__asserta(Goal). % NOTE Usage.
-
-% The following clause adds `Clause` to the knowledge base w/o verifying it.
+% The following clause adds `Clause` to the knowledge base *w/o* verifying it!
 skiphornadd(Clause) :-
     horn_pl__asserta(Clause). % NOTE Usage.
 

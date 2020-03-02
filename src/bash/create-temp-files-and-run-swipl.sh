@@ -25,8 +25,7 @@
 FILENAME_HORN="$1"
 FILENAME_PROLOG="$2"
 
-# Note that the path to horc within the docker image is `/app/horc/`:
-
+# Note that the path to horc within the docker image is `/app/horc/`.
 # Create a temporary Prolog module that wraps a Horn
 # knowledge base, and exposes two defined predicates -- one returning clauses
 # in the knowledge base, and the other adds new clauses to the knowledge base.
@@ -42,7 +41,7 @@ horn_pl__asserta(Clause) :-
     asserta(Clause).
 EOF
 
-# Create a temporary Prolog script that is to be executed as the top file.
+# Create a temporary Prolog script that is to be executed in SWI-Prolog.
 cat > /app/horc/var/temp-loaded.pl << EOF
 :- use_module('/app/horc/var/temp-module.pl').
 
@@ -50,8 +49,6 @@ cat > /app/horc/var/temp-loaded.pl << EOF
 
 :- ensure_loaded('$FILENAME_PROLOG').
 EOF
-# NOTE In the generated file, I don't see the need to declare dynamic
-# predicates (via `dynamic`). # TODO Check why.
 # NOTE In the generated file, new predicates can be later added via `[user].` 
 # to be found by the horn interpreter (say, `horn/2`). # TODO Try to prevent.
 
