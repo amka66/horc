@@ -58,10 +58,7 @@ Second, Horn knowledge bases use standard Prolog notation for the Horn clauses.
 If you have [Docker](https://en.wikipedia.org/wiki/Docker_(software)) on your computer, `horc` can be automatically downloaded and executed with *no* need for local installation (nor cloning the project repository).
 In the command prompt, simply enter the following:
 
-```$ docker container run [-it] [--rm] [-v <local_dir>:<container_dir> ...] <docker_hub_user_id>/horc <horn_file> [<prolog_file>]```
-
-* `<docker_hub_user_id>` (mandatory): User ID in Docker Hub that currently stores the docker image.
-Use `amka66`. __TODO__ Upload image!
+```$ docker container run [-it] [--rm] [-v <local_dir>:<container_dir> ...] amka66/horc <horn_file> [<prolog_file>]```
 
 * `<horn_file>` (mandatory): Path to a __Horn knowledge base__ file (optionally ending with the extension `.hn`), consisting of a set of Horn clauses, and written in Prolog notation.
 It is to be loaded and consulted by the interpreter.
@@ -176,8 +173,6 @@ __TODO__ Mention also [Isabelle](https://en.wikipedia.org/wiki/Isabelle_(proof_a
 __NOTE__ More info about `horc` and the included material may be found in commit `ba191a15a8`, directory `doc`.
 
 __TODO__ Add a short paper to arXiv, and include a BibTeX entry for citation.
-
-__TODO__ Go over todos.
 
 ## License ##
 
