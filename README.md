@@ -1,4 +1,11 @@
-# `horc`: A Lightweight Horn-Clause Interpreter #
+# `horc`: Lightweight Horn-Clause Interpreter #
+
+## Abstract ##
+
+A free and open-source tool to perform queries on knowledge bases consisting of [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause).
+A Horn clause is essentially a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference) operating on [syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
+Accordingly, Horn clauses are a powerful means to represent the syntax and the semantics of target [formalisms](https://en.wikipedia.org/wiki/Formal_system) such as logical systems, models of computation, and programming languages.
+Executing queries in `horc`, which are sound and complete, is the way to put knowledge bases into use.
 
 ## Features ##
 
