@@ -1,11 +1,14 @@
-# `horc`: Lightweight Horn-Clause Interpreter #
+# `horc`: lightweight `Hor`n-`c`lause interpreter #
 
 ## Abstract ##
 
-A free and open-source tool to perform queries on knowledge bases consisting of [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause).
-A Horn clause is essentially a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference) operating on [syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
-Accordingly, Horn clauses are a powerful means to represent the syntax and the semantics of target [formalisms](https://en.wikipedia.org/wiki/Formal_system) such as logical systems, models of computation, and programming languages.
-Executing queries in `horc`, which are sound and complete, is the way to put knowledge bases into use.
+`horc` is a free and open-source tool for programming with [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause). Horn clauses are the core of [Prolog](https://en.wikipedia.org/wiki/Prolog) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming) in general. `horc` is an extension to Prolog's interpreter implementing a sound and complete search procedure that fully respects their logical interpretation – namely, Horn logic. 
+
+Horn logic is a minimalist yet powerful formalism centered around recursive definitions.
+A Horn clause is nothing more than a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference). In turn, logical terms may be identified with [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
+Accordingly, Horn clauses are a powerful means to represent the syntax and the semantics of target [formalisms](https://en.wikipedia.org/wiki/Formal_system) – such as logical systems, models of computation, and programming languages – in ways that parallel their textbook definitions.
+
+By executing queries, `horc` allows putting Horn-clause specifications (and the formalisms that they define) into use.
 
 ## Features ##
 
