@@ -22,54 +22,73 @@
 % Horn Knowledge Base
 % ===================
 
+% Natural Numbers
+% ---------------
+
+natural(zero_natual).
+natural(succesor_natual(N)) :-
+    natural(N).
+
 % Universe Terms
 % --------------
 
-universe_variable(zero_universe_variable).
-universe_variable(successor_universe_variable(UV)) :-
-    universe_variable(UV).
+% `uterm(...)` = ... is a universe term
+uterm(variable_uterm(N)) :-
+    natural(N).  % subscript mark
+uterm(zero_uterm).
+uterm(successor_uterm(U)) :-
+    uterm(U).
+uterm(max_uterm(U1,U2)) :-
+    uterm(U1),
+    uterm(U2).
+uterm(imax_uterm(U1,U2)) :-
+    uterm(U1),
+    uterm(U2).
 
-universe_term(UV) :-
-    universe_variable(UV).
-universe_term(zero_universe).
-universe_term(successor_universe(U)) :-
-    universe_term(U).
-universe_term(maximum_universe(U1, U2)) :-
-    universe_term(U1),
-    universe_term(U2).
-universe_term(impredicative_maximum_universe(U1, U2)) :-
-    universe_term(U1),
-    universe_term(U2).
+% `uterm_list(...)` = ... is a list of universe terms
+uterm_list(empty_uterm_list).
+uterm_list(append_uterm_list(Us,U)) :-
+    uterm_list(Us),
+    uterm(U).
 
 % Expressions
 % -----------
 
-expression_variable(zero_expression_variable).
-expression_variable(successor_expression_variable(EV)) :-
-    expression_variable(EV).
-
-expression_constant(zero_expression_constant).
-expression_constant(successor_expression_constant(EC)) :-
-    expression_constant(EC).
-
-instantiated_expression_constant(empty_instantiated_expression_constant(EC)) :-
-    expression_constant(EC).
-instantiated_expression_constant(append_instantiated_expression_constant(IEC, U)) :-
-    instantiated_expression_constant(IEC),
-    universe_term(U).
-
-expression(EV) :-
-    expression_variable(EV).  % treat as de Bruijn index
-expression(IEC) :-
-    instantiated_expression_constant(IEC).
+% `expression(...E...)` = ...E... is an expression (a term and/or a type)
+expression(variable_expression(N)) :-
+    natural(N).  % subscript mark treated as de Bruijn index
+expression(constant_expression(N,Us)) :-
+    natural(N),  % subscript mark
+    uterm_list(Us).
 expression(sort_expression(U)) :-
-    universe_term(U).
-expression(function_application_expression(E1, E2)) :-
+    uterm(U).
+expression(application_expression(E1,E2)) :-
     expression(E1),
     expression(E2).
-expression(lambda_abstraction_expression(E1, E2)) :-  % binding operator - we use de Bruijn indices
-    expression(E1),  % type
-    expression(E2).  % term
-expression(pi_abstraction_expression(E1, E2)) :-  % binding operator - we use de Bruijn indices
-    expression(E1),  % type
-    expression(E2).  % term
+expression(lambda_expression(E1,E2)) :-  % binding via de Bruijn indices
+    expression(E1),  % type (unbound)
+    expression(E2).  % term (bound)
+expression(pi_expression(E1,E2)) :-  % binding via de Bruijn indices
+    expression(E1),  % type (unbound)
+    expression(E2).  % term (bound)
+
+% `expression_list(...Es...)` = ...Es... is a list of expressions
+expression_list(empty_expression_list).
+expression_list(append_expression_list(Es,E)) :-
+    expression_list(Es),
+    expression(E).
+
+% Substitution
+% ------------
+
+% `substitute_uterm(...U..., ...Us_subst..., ...U_out...)` = 
+%   uterm ...U_out... is the result of substituting uterm list ...Us_subst... for uterm variables 0, ..., length(Us_subst) - 1 in uterm ...U...
+
+% `substitute_uterm_list(...Us..., ...Us_subst..., ...Us_out...)` = 
+%   uterm list ...Us_out... is the result of substituting uterm list ...Us_subst... for uterm variables 0, ..., length(Us_subst) - 1 in uterm list ...Us...
+
+% `substitute_expression(...E..., ...Es_subst..., ...E_out...)` = 
+%   expression ...E_out... is the result of de Bruijn substitution of expression list ...Es_subst... for expression variables 0, ..., length(Es_subst) - 1 in expression ...E...
+
+% `substitute_expression_list(...Es..., ...Es_subst..., ...Es_out...)` = 
+%   expression list ...Es_out... is the result of de Bruijn substitution of expression list ...Es_subst... for expression variables 0, ..., length(Es_subst) - 1 in expression list ...Es...
