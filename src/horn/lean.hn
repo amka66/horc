@@ -1,0 +1,75 @@
+%
+%   Copyright 2020 Amir Kantor
+%
+%   Licensed under the Apache License, Version 2.0 (the "License");
+%   you may not use this file except in compliance with the License.
+%   You may obtain a copy of the License at
+%
+%       http://www.apache.org/licenses/LICENSE-2.0
+%
+%   Unless required by applicable law or agreed to in writing, software
+%   distributed under the License is distributed on an "AS IS" BASIS,
+%   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%   See the License for the specific language governing permissions and
+%   limitations under the License.
+%
+
+% ___File name:___ lean.hn
+
+% ___File purpose:___ Horn knowledge base defining Lean's dialect of the 
+% Calculus of Inductive Construcstions.
+
+% Horn Knowledge Base
+% ===================
+
+% Universe Terms
+% --------------
+
+universe_variable(zero_universe_variable).
+universe_variable(successor_universe_variable(UV)) :-
+    universe_variable(UV).
+
+universe_term(UV) :-
+    universe_variable(UV).
+universe_term(zero_universe).
+universe_term(successor_universe(U)) :-
+    universe_term(U).
+universe_term(maximum_universe(U1, U2)) :-
+    universe_term(U1),
+    universe_term(U2).
+universe_term(impredicative_maximum_universe(U1, U2)) :-
+    universe_term(U1),
+    universe_term(U2).
+
+% Expressions
+% -----------
+
+expression_variable(zero_expression_variable).
+expression_variable(successor_expression_variable(EV)) :-
+    expression_variable(EV).
+
+expression_constant(zero_expression_constant).
+expression_constant(successor_expression_constant(EC)) :-
+    expression_constant(EC).
+
+instantiated_expression_constant(empty_instantiated_expression_constant(EC)) :-
+    expression_constant(EC).
+instantiated_expression_constant(append_instantiated_expression_constant(IEC, U)) :-
+    instantiated_expression_constant(IEC),
+    universe_term(U).
+
+expression(EV) :-
+    expression_variable(EV).  % treat as de Bruijn index
+expression(IEC) :-
+    instantiated_expression_constant(IEC).
+expression(sort_expression(U)) :-
+    universe_term(U).
+expression(function_application_expression(E1, E2)) :-
+    expression(E1),
+    expression(E2).
+expression(lambda_abstraction_expression(E1, E2)) :-  % binding operator - we use de Bruijn indices
+    expression(E1),  % type
+    expression(E2).  % term
+expression(pi_abstraction_expression(E1, E2)) :-  % binding operator - we use de Bruijn indices
+    expression(E1),  % type
+    expression(E2).  % term
