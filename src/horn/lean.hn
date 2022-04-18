@@ -98,12 +98,14 @@ expression(application_expression(E1,E2)) :-
     expression(E1),
     expression(E2).
 expression(lambda_expression(E1,E2)) :-  % binding via de Bruijn indices (0-based)
-    expression(E1),  % type (unbound)
-    expression(E2).  % term (bound)
+    expression(E1),  % variable's type (unbound)
+    expression(E2).  % term body (bound)
 expression(pi_expression(E1,E2)) :-  % binding via de Bruijn indices (0-based)
-    expression(E1),  % type (unbound)
-    expression(E2).  % term (bound)
-% may extend to include 'let' expressions (a.k.a., local definitions) % NOTE
+    expression(E1),  % variable's type (unbound)
+    expression(E2).  % term body (bound)
+expression(let_expression(E1,E2)) :-  % binding via de Bruijn indices (0-based)
+    expression(E1),  % substituted term (unbound)
+    expression(E2).  % term body (bound)
 
 % expression_list(...Es...) =
 %   ...Es... is a list of expressions
@@ -242,6 +244,14 @@ incremenet_variables_expression(pi_expression(E1,E2), N, pi_expression(E1_out,E2
     incremenet_variables_expression(E1, N, E1_out),
     expression(E2_out),
     incremenet_variables_expression(E2, successor_natural(N), E2_out).
+incremenet_variables_expression(let_expression(E1,E2), N, let_expression(E1_out,E2_out)) :-
+    expression(E1),
+    expression(E2),
+    natural(N),
+    expression(E1_out),
+    incremenet_variables_expression(E1, N, E1_out),
+    expression(E2_out),
+    incremenet_variables_expression(E2, successor_natural(N), E2_out).
 
 % incremenet_variables_expression_list(...Es..., ...N..., ...Es_out...) =
 %   expression list ...Es_out... is the result of incrementing by one all free expression variables
@@ -301,6 +311,18 @@ substitute_expression(lambda_expression(E1,E2), Es_subst, lambda_expression(E1_o
     expression(E2_out),
     substitute_expression(E2, Es_subst3, E2_out).
 substitute_expression(pi_expression(E1,E2), Es_subst, pi_expression(E1_out,E2_out)) :-
+    expression(E1),
+    expression(E2),
+    expression_list(Es_subst),
+    expression(E1_out),
+    substitute_expression(E1, Es_subst, E1_out),
+    expression_list(Es_subst2),
+    incremenet_variables_expression_list(Es_subst, zero_natural, Es_subst2),
+    expression_list(Es_subst3),
+    precede_expression_list(variable_expression(zero_natural), Es_subst2, Es_subst3),
+    expression(E2_out),
+    substitute_expression(E2, Es_subst3, E2_out).
+substitute_expression(let_expression(E1,E2), Es_subst, let_expression(E1_out,E2_out)) :-
     expression(E1),
     expression(E2),
     expression_list(Es_subst),
