@@ -36,8 +36,8 @@ natural(successor_natural(N)) :-
 lt_natural(N, successor_natural(N)) :-
     natural(N).
 lt_natural(N1, successor_natural(N2)) :-
-    natural(N1),
-    natural(N2),
+    natural(N1),  % skip
+    natural(N2),  % skip
     lt_natural(N1, N2).
 
 % lte_natural(...N1..., ...N2...) =
@@ -45,8 +45,8 @@ lt_natural(N1, successor_natural(N2)) :-
 lte_natural(N, N) :-
     natural(N).
 lte_natural(N1, N2) :-
-    natural(N1),
-    natural(N2),
+    natural(N1),  % skip
+    natural(N2),  % skip
     lt_natural(N1, N2).
 
 % Universe Terms
@@ -77,9 +77,9 @@ uterm_list(append_uterm_list(Us,U)) :-
 %   the length of uterm list ...Us... is natural number ...N_out...
 length_uterm_list(empty_uterm_list, zero_natural).
 length_uterm_list(append_uterm_list(Us,U), successor_natural(N_out)) :-
-    uterm_list(Us),
+    uterm_list(Us),  % skip
     uterm(U),
-    natural(N_out),
+    natural(N_out),  % skip
     length_uterm_list(Us, N_out).
 
 % Expressions
@@ -118,9 +118,9 @@ expression_list(append_expression_list(Es,E)) :-
 %   the length of expression list ...Es... is natural number ...N_out...
 length_expression_list(empty_expression_list, zero_natural).
 length_expression_list(append_expression_list(Es,E), successor_natural(N_out)) :-
-    expression_list(Es),
+    expression_list(Es),  % skip
     expression(E),
-    natural(N_out),
+    natural(N_out),  % skip
     length_expression_list(Es, N_out).
 
 % concatenate_expression_list(...Es1..., ...Es2..., ...Es_out...) =
@@ -129,19 +129,19 @@ length_expression_list(append_expression_list(Es,E), successor_natural(N_out)) :
 concatenate_expression_list(Es1, empty_expression_list, Es1) :-
     expression_list(Es1).
 concatenate_expression_list(Es1, append_expression_list(Es2,E2), append_expression_list(Es_out,E2)) :-
-    expression_list(Es1),
-    expression_list(Es2),
+    expression_list(Es1),  % skip
+    expression_list(Es2),  % skip
     expression(E2),
-    expression_list(Es_out),
+    expression_list(Es_out),  % skip
     concatenate_expression_list(Es1, Es2, Es_out).
 
 % precede_expression_list(...E..., ...Es..., ...Es_out...) =
 %   expression list ...Es_out... is the result of preceding expression list ...Es...
 %   with expression ...E...
 precede_expression_list(E, Es, Es_out) :-
-    expression(E),
-    expression_list(Es),
-    expression_list(Es_out),
+    expression(E),  % skip
+    expression_list(Es),  % skip
+    expression_list(Es_out),  % skip
     concatenate_expression_list(append_expression_list(empty_expression_list,E), Es, Es_out).
 
 % Substitution
@@ -152,38 +152,38 @@ precede_expression_list(E, Es, Es_out) :-
 %   for uterm variables 0, ..., length(Us_subst) - 1 in uterm ...U...
 %   (other uterm variables are undefined)
 substitute_uterm(variable_uterm(N), append_uterm_list(Us_subst,U1), U_out) :-
-    natural(N),
-    uterm_list(Us_subst),
+    natural(N),  % skip
+    uterm_list(Us_subst),  % skip
     uterm(U1),
-    uterm(U_out),
+    uterm(U_out),  % skip
     substitute_uterm(variable_uterm(N), Us_subst, U_out).
 substitute_uterm(variable_uterm(N), append_uterm_list(Us_subst,U1), U1) :-
-    natural(N),
-    uterm_list(Us_subst),
+    natural(N),  % skip
+    uterm_list(Us_subst),  % skip
     uterm(U1),
     length_uterm_list(Us_subst, N).
 substitute_uterm(zero_uterm, Us_subst, zero_uterm) :-
     uterm_list(Us_subst).
 substitute_uterm(successor_uterm(U), Us_subst, successor_uterm(U_out)) :-
-    uterm(U),
-    uterm_list(Us_subst),
-    uterm(U_out),
+    uterm(U),  % skip
+    uterm_list(Us_subst),  % skip
+    uterm(U_out),  % skip
     substitute_uterm(U, Us_subst, U_out).
 substitute_uterm(max_uterm(U1,U2), Us_subst, max_uterm(U1_out,U2_out)) :-
-    uterm(U1),
-    uterm(U2),
-    uterm_list(Us_subst),
-    uterm(U1_out),
+    uterm(U1),  % skip
+    uterm(U2),  % skip
+    uterm_list(Us_subst),  % skip
+    uterm(U1_out),  % skip
     substitute_uterm(U1, Us_subst, U1_out),
-    uterm(U2_out),
+    uterm(U2_out),  % skip
     substitute_uterm(U2, Us_subst, U2_out).
 substitute_uterm(imax_uterm(U1,U2), Us_subst, imax_uterm(U1_out,U2_out)) :-
-    uterm(U1),
-    uterm(U2),
-    uterm_list(Us_subst),
-    uterm(U1_out),
+    uterm(U1),  % skip
+    uterm(U2),  % skip
+    uterm_list(Us_subst),  % skip
+    uterm(U1_out),  % skip
     substitute_uterm(U1, Us_subst, U1_out),
-    uterm(U2_out),
+    uterm(U2_out),  % skip
     substitute_uterm(U2, Us_subst, U2_out).
 
 % substitute_uterm_list(...Us..., ...Us_subst..., ...Us_out...) =
@@ -193,12 +193,12 @@ substitute_uterm(imax_uterm(U1,U2), Us_subst, imax_uterm(U1_out,U2_out)) :-
 substitute_uterm_list(empty_uterm_list, Us_subst, empty_uterm_list) :-
     uterm_list(Us_subst).
 substitute_uterm_list(append_uterm_list(Us,U), Us_subst, append_uterm_list(Us_out,U_out)) :-
-    uterm_list(Us),
-    uterm(U),
-    uterm_list(Us_subst),
-    uterm_list(Us_out),
+    uterm_list(Us),  % skip
+    uterm(U),  % skip
+    uterm_list(Us_subst),  % skip
+    uterm_list(Us_out),  % skip
     substitute_uterm_list(Us, Us_subst, Us_out),
-    uterm(U_out),
+    uterm(U_out),  % skip
     substitute_uterm(U, Us_subst, U_out).
 
 % incremenet_variables_expression(...E..., ...N..., ...E_out...) =
@@ -206,12 +206,12 @@ substitute_uterm_list(append_uterm_list(Us,U), Us_subst, append_uterm_list(Us_ou
 %   that are greater than or equal to natural number ...N... in expression ...E..., while
 %   keeping all free expression variables that are strinctly less than ...N... as is
 incremenet_variables_expression(variable_expression(N), N1, variable_expression(N)) :-
-    natural(N),
-    natural(N1),
+    natural(N),  % skip
+    natural(N1),  % skip
     lt_natural(N, N1).
 incremenet_variables_expression(variable_expression(N), N1, variable_expression(successor_natural(N))) :-
-    natural(N),
-    natural(N1),
+    natural(N),  % skip
+    natural(N1),  % skip
     lte_natural(N1, N).
 incremenet_variables_expression(constant_expression(N,Us), N1, constant_expression(N,Us)) :-
     natural(N),
@@ -221,36 +221,36 @@ incremenet_variables_expression(sort_expression(U), N, sort_expression(U)) :-
     uterm(U),
     natural(N).
 incremenet_variables_expression(application_expression(E1,E2), N, application_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    natural(N),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    natural(N),  % skip
+    expression(E1_out),  % skip
     incremenet_variables_expression(E1, N, E1_out),
-    expression(E2_out),
+    expression(E2_out),  % skip
     incremenet_variables_expression(E2, N, E2_out).
 incremenet_variables_expression(lambda_expression(E1,E2), N, lambda_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    natural(N),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    natural(N),  % skip
+    expression(E1_out),  % skip
     incremenet_variables_expression(E1, N, E1_out),
-    expression(E2_out),
+    expression(E2_out),  % skip
     incremenet_variables_expression(E2, successor_natural(N), E2_out).
 incremenet_variables_expression(pi_expression(E1,E2), N, pi_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    natural(N),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    natural(N),  % skip
+    expression(E1_out),  % skip
     incremenet_variables_expression(E1, N, E1_out),
-    expression(E2_out),
+    expression(E2_out),  % skip
     incremenet_variables_expression(E2, successor_natural(N), E2_out).
 incremenet_variables_expression(let_expression(E1,E2), N, let_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    natural(N),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    natural(N),  % skip
+    expression(E1_out),  % skip
     incremenet_variables_expression(E1, N, E1_out),
-    expression(E2_out),
+    expression(E2_out),  % skip
     incremenet_variables_expression(E2, successor_natural(N), E2_out).
 
 % incremenet_variables_expression_list(...Es..., ...N..., ...Es_out...) =
@@ -260,12 +260,12 @@ incremenet_variables_expression(let_expression(E1,E2), N, let_expression(E1_out,
 incremenet_variables_expression_list(empty_expression_list, N, empty_expression_list) :-
     natural(N).
 incremenet_variables_expression_list(append_expression_list(Es,E), N, append_expression_list(Es_out,E_out)) :-
-    expression_list(Es),
-    expression(E),
-    natural(N),
-    expression_list(Es_out),
+    expression_list(Es),  % skip
+    expression(E),  % skip
+    natural(N),  % skip
+    expression_list(Es_out),  % skip
     incremenet_variables_expression_list(Es, N, Es_out),
-    expression(E_out),
+    expression(E_out),  % skip
     incremenet_variables_expression(E, N, E_out).
 
 % substitute_expression(...E..., ...Es_subst..., ...E_out...) =
@@ -273,14 +273,14 @@ incremenet_variables_expression_list(append_expression_list(Es,E), N, append_exp
 %   for expression variables 0, ..., length(Es_subst) - 1 in expression ...E...
 %   (other expression variables are undefined)
 substitute_expression(variable_expression(N), append_expression_list(Es_subst,E1), E_out) :-
-    natural(N),
-    expression_list(Es_subst),
+    natural(N),  % skip
+    expression_list(Es_subst),  % skip
     expression(E1),
-    expression(E_out),
+    expression(E_out),  % skip
     substitute_expression(variable_expression(N), Es_subst, E_out).
 substitute_expression(variable_expression(N), append_expression_list(Es_subst,E1), E1) :-
-    natural(N),
-    expression_list(Es_subst),
+    natural(N),  % skip
+    expression_list(Es_subst),  % skip
     expression(E1),
     length_expression_list(Es_subst, N).
 substitute_expression(constant_expression(N,Us), Es_subst, constant_expression(N,Us)) :-
@@ -291,48 +291,48 @@ substitute_expression(sort_expression(U), Es_subst, sort_expression(U)) :-
     uterm(U),
     expression_list(Es_subst).
 substitute_expression(application_expression(E1,E2), Es_subst, application_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    expression_list(Es_subst),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    expression_list(Es_subst),  % skip
+    expression(E1_out),  % skip
     substitute_expression(E1, Es_subst, E1_out),
-    expression(E2_out),
+    expression(E2_out),  % skip
     substitute_expression(E2, Es_subst, E2_out).
 substitute_expression(lambda_expression(E1,E2), Es_subst, lambda_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    expression_list(Es_subst),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    expression_list(Es_subst),  % skip
+    expression(E1_out),  % skip
     substitute_expression(E1, Es_subst, E1_out),
-    expression_list(Es_subst2),
+    expression_list(Es_subst2),  % skip
     incremenet_variables_expression_list(Es_subst, zero_natural, Es_subst2),
-    expression_list(Es_subst3),
+    expression_list(Es_subst3),  % skip
     precede_expression_list(variable_expression(zero_natural), Es_subst2, Es_subst3),
-    expression(E2_out),
+    expression(E2_out),  % skip
     substitute_expression(E2, Es_subst3, E2_out).
 substitute_expression(pi_expression(E1,E2), Es_subst, pi_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    expression_list(Es_subst),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    expression_list(Es_subst),  % skip
+    expression(E1_out),  % skip
     substitute_expression(E1, Es_subst, E1_out),
-    expression_list(Es_subst2),
+    expression_list(Es_subst2),  % skip
     incremenet_variables_expression_list(Es_subst, zero_natural, Es_subst2),
-    expression_list(Es_subst3),
+    expression_list(Es_subst3),  % skip
     precede_expression_list(variable_expression(zero_natural), Es_subst2, Es_subst3),
-    expression(E2_out),
+    expression(E2_out),  % skip
     substitute_expression(E2, Es_subst3, E2_out).
 substitute_expression(let_expression(E1,E2), Es_subst, let_expression(E1_out,E2_out)) :-
-    expression(E1),
-    expression(E2),
-    expression_list(Es_subst),
-    expression(E1_out),
+    expression(E1),  % skip
+    expression(E2),  % skip
+    expression_list(Es_subst),  % skip
+    expression(E1_out),  % skip
     substitute_expression(E1, Es_subst, E1_out),
-    expression_list(Es_subst2),
+    expression_list(Es_subst2),  % skip
     incremenet_variables_expression_list(Es_subst, zero_natural, Es_subst2),
-    expression_list(Es_subst3),
+    expression_list(Es_subst3),  % skip
     precede_expression_list(variable_expression(zero_natural), Es_subst2, Es_subst3),
-    expression(E2_out),
+    expression(E2_out),  % skip
     substitute_expression(E2, Es_subst3, E2_out).
 
 % substitute_expression_list(...Es..., ...Es_subst..., ...Es_out...) = 
@@ -342,10 +342,10 @@ substitute_expression(let_expression(E1,E2), Es_subst, let_expression(E1_out,E2_
 substitute_expression_list(empty_expression_list, Es_subst, empty_expression_list) :-
     expression_list(Es_subst).
 substitute_expression_list(append_expression_list(Es,E), Es_subst, append_expression_list(Es_out,E_out)) :-
-    expression_list(Es),
-    expression(E),
-    expression_list(Es_subst),
-    expression_list(Es_out),
+    expression_list(Es),  % skip
+    expression(E),  % skip
+    expression_list(Es_subst),  % skip
+    expression_list(Es_out),  % skip
     substitute_expression_list(Es, Es_subst, Es_out),
-    expression(E_out),
+    expression(E_out),  % skip
     substitute_expression(E, Es_subst, E_out).
