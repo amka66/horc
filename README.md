@@ -2,13 +2,10 @@
 
 ## Abstract ##
 
-`horc` is a free and open-source tool for programming with [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause). Horn clauses are the core of [Prolog](https://en.wikipedia.org/wiki/Prolog) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming) in general. `horc` extends the Prolog interpreter and implements sound and complete query resolution that fully respects the logical interpretation of clauses – namely, Horn logic. 
+`horc` is a free and open-source implementation of the language of [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause) – a minimalist fragment of logic that lies at the heart of [Prolog](https://en.wikipedia.org/wiki/Prolog) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming). In contrast to Prolog, however, `horc` fully respects the logical interpretation of Horn clauses. Specifically, it extends the Prolog interpreter and implements sound and complete query resolution, essentially turning it into an automated proof system.
 
-Horn logic is a minimalist yet powerful formalism centered around recursive definitions.
-A (definite) Horn clause is nothing but a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference). In turn, logical terms may be identified with [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
-Accordingly, Horn clauses are a powerful means to represent the syntax and the semantics of target [formalisms](https://en.wikipedia.org/wiki/Formal_system) – such as logical systems, models of computation, and programming languages – in ways that parallel their textbook definitions.
-
-By executing queries, `horc` allows putting Horn-clause specifications and the formalisms that they define into use. To try it out on any computer preinstalled with [Docker](https://en.wikipedia.org/wiki/Docker_(software)), enter for example: `docker run --rm amka66/horc list.hn list-queries.pl`.
+The language of Horn logic is minimalist yet powerful. A (definite) Horn clause is a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference) that may be used to inductively define predicates (or, [judgments](https://en.wikipedia.org/wiki/Judgment_(mathematical_logic))) on [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
+Therefore, Horn clauses are particularly suited for implementing [formal systems](https://en.wikipedia.org/wiki/Formal_system): it turns textbook definitions of logical systems, models of computation, and programming languages into a fully oprerational implementation. To try `horc` on any computer preinstalled with [Docker](https://en.wikipedia.org/wiki/Docker_(software)), enter for example: `docker run --rm amka66/horc list.hn list-queries.pl`.
 
 
 ## Features ##
