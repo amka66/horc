@@ -1,12 +1,18 @@
-# `horc`: lightweight `Hor`n-`c`lause interpreter #
+# `horc`: Lightweight `HOR`n-`C`lause Interpreter #
 
 ## Abstract ##
 
-`horc` is a free and open-source implementation of the language of [Horn clauses](https://en.wikipedia.org/wiki/Horn_clause) – a minimalist fragment of logic that lies at the heart of [Prolog](https://en.wikipedia.org/wiki/Prolog) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming). In contrast to Prolog, `horc` fully respects the logical interpretation of Horn clauses. Specifically, it extends the Prolog interpreter and implements sound and complete query resolution, essentially turning it into an automated proof system.
+`horc` is a minimalist implementation of 'pure' [logic programming](https://en.wikipedia.org/wiki/Logic_programming) as an extension of [Prolog](https://en.wikipedia.org/wiki/Prolog). In includes sound and complete query resolution respecting the logical interpretation of the language.
+Pure logic programming – a.k.a, [Horn logic](https://en.wikipedia.org/wiki/Horn_clause)) – is a simple yet powerful (meta-)language allowing to formally define more complex formalisms.
+With `horc`, these definitions become fully operational implementations of the target formalisms.
 
-The language of Horn logic is minimalist yet powerful. A (definite) Horn clause is a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference) that may be used to inductively define predicates (or, [judgments](https://en.wikipedia.org/wiki/Judgment_(mathematical_logic))) on [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
-Therefore, Horn clauses are particularly suited for implementing [formal systems](https://en.wikipedia.org/wiki/Formal_system): `horc` turns textbook definitions of logical systems, models of computation, and programming languages into a fully operational implementation. To try `horc` on any computer preinstalled with [Docker](https://en.wikipedia.org/wiki/Docker_(software)), run for example: `docker run --rm amka66/horc list.hn list-queries.pl`.
-
+More specifically, a (definite) Horn clause may be viewed as a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference).
+Together, Horn clauses define predicates (or, [judgments](https://en.wikipedia.org/wiki/Judgment_(mathematical_logic))) on [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
+Accordingly, `horc` turns textbook definitions of [formal systems](https://en.wikipedia.org/wiki/Formal_system) such as logical systems, models of computation, and programming languages, into fully operational implementations.
+It is easy to try `horc` and the included examples on any computer preinstalled with [Docker](https://en.wikipedia.org/wiki/Docker_(software)). For example, run:
+```
+docker run --rm amka66/horc list.hn list-queries.pl
+```
 
 ## Features ##
 
