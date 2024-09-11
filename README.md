@@ -2,14 +2,15 @@
 
 ## Abstract ##
 
-`horc` is a minimalist implementation of 'pure' [logic programming](https://en.wikipedia.org/wiki/Logic_programming) as an extension of [Prolog](https://en.wikipedia.org/wiki/Prolog). In includes sound and complete query resolution respecting the logical interpretation of the language.
-Pure logic programming – a.k.a, [Horn logic](https://en.wikipedia.org/wiki/Horn_clause)) – is a simple yet powerful (meta-)language allowing to formally define more complex formalisms.
-With `horc`, these definitions become fully operational implementations of the target formalisms.
+`horc` is an implementation of 'pure' [logic programming](https://en.wikipedia.org/wiki/Logic_programming) as a lightweight extension to [Prolog](https://en.wikipedia.org/wiki/Prolog). It includes sound and complete query resolution respecting the logical interpretation of the language.
+Pure logic programming – a.k.a, [Horn logic](https://en.wikipedia.org/wiki/Horn_clause) – is a minimalist yet powerful (meta-)language allowing to formally define more complex formalisms.
+With `horc`, such definitions become fully operational.
 
-More specifically, a (definite) Horn clause may be viewed as a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference).
-Together, Horn clauses define predicates (or, [judgments](https://en.wikipedia.org/wiki/Judgment_(mathematical_logic))) on [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
-Accordingly, `horc` turns textbook definitions of [formal systems](https://en.wikipedia.org/wiki/Formal_system) such as logical systems, models of computation, and programming languages, into fully operational implementations.
-It is easy to try `horc` and the included examples on any computer preinstalled with [Docker](https://en.wikipedia.org/wiki/Docker_(software)). For example, run:
+More specifically, a (definite) Horn clause is a [rule of inference](https://en.wikipedia.org/wiki/Rule_of_inference).
+Together, Horn clauses inductively define predicates (or, [judgments](https://en.wikipedia.org/wiki/Judgment_(mathematical_logic))) on [abstract syntax trees](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
+This way, `horc` turns textbook definitions of [formal (logical) systems](https://en.wikipedia.org/wiki/Formal_system), as well as the [operational semantics](https://en.wikipedia.org/wiki/Operational_semantics) of models of computation and programming languages, into fully operational implementations.
+
+It is easy to try `horc` and examine the included formalisms on any computer preinstalled with [Docker](https://en.wikipedia.org/wiki/Docker_(software)). For example, run:
 ```
 docker run --rm amka66/horc list.hn list-queries.pl
 ```
